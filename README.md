@@ -221,7 +221,7 @@ El siguiente código implementa un sistema de monitoreo y control para una incub
 El sistema permite medir temperatura, humedad y peso del neonato, además de controlar automáticamente un sistema de calefacción (bombillo), ventilación (ventilador) y señalización mediante LEDs, proporcionando retroalimentación visual en una pantalla OLED.
 
 
-#### 2. Librerías utilizadas
+#### 1. Librerías utilizadas
 Estas librerías permiten la comunicación con los diferentes dispositivos del sistema, incluyendo la pantalla OLED, el sensor de temperatura y humedad, y la celda de carga para medición de peso.
 ```
 #include <Wire.h>
@@ -230,7 +230,7 @@ Estas librerías permiten la comunicación con los diferentes dispositivos del s
 #include <DHT.h>
 #include "HX711.h"
 ```
-#### 3. Configuración de pines del sistema
+#### 2. Configuración de pines del sistema
 En esta sección se definen los pines del ESP32 a los cuales están conectados los sensores y actuadores, permitiendo la correcta comunicación entre hardware y software.
 
 ```
@@ -251,7 +251,7 @@ En esta sección se definen los pines del ESP32 a los cuales están conectados l
 #define HX_SCK     27
 ```
 
-#### 4. Definición de umbrales térmicos
+#### 3. Definición de umbrales térmicos
 Estos valores establecen los límites de temperatura para el control del sistema:
 
 Temperatura baja: menor a 36°C
@@ -262,7 +262,7 @@ Temperatura alta: mayor a 38°C
 const float TEMP_LOW  = 36.0;
 const float TEMP_HIGH = 38.0;
 ````
-#### 5. Variables del sistema
+#### 4. Variables del sistema
 Estas variables almacenan las mediciones de los sensores y el estado actual de los actuadores.
 
   ````
@@ -273,7 +273,7 @@ float weight_kg   = 0.0;
 bool fanState    = true;
 bool heaterState = false;
 ````
-#### 6. Control de LEDs indicadores
+#### 5. Control de LEDs indicadores
 Esta función permite visualizar el estado térmico del sistema mediante LEDs:
 
  - LED_LOW → temperatura baja
@@ -287,7 +287,7 @@ void actualizarLEDs(float t) {
   else                    setLEDs(true,  false, false);
 }
 ````
-#### 7. Control del sistema de calefacción (relé)
+#### 6. Control del sistema de calefacción (relé)
 El relé controla el bombillo que actúa como fuente de calor:
 
 - Se activa cuando la temperatura es inferior al límite superior
@@ -303,7 +303,7 @@ void actualizarBombillo(float t) {
   else               setRelay(false);
 }
 ````
-#### 8. Control del sistema de ventilación
+#### 7. Control del sistema de ventilación
 El ventilador permanece encendido constantemente, garantizando circulación de aire dentro de la incubadora.
 
 ````
@@ -312,7 +312,7 @@ void actualizarVentilador() {
   digitalWrite(FAN_PIN, HIGH);
 }
 ````
-#### 9. Lectura del sensor de temperatura y humedad
+#### 8. Lectura del sensor de temperatura y humedad
 Se obtienen las mediciones del sensor DHT22, validando que los datos no sean inválidos (NaN).
 
 ````
@@ -323,7 +323,7 @@ void leerDHT() {
   if (!isnan(h)) humidity    = h;
 }
 ````
-#### 10. Lectura del sensor de peso (HX711)
+#### 9. Lectura del sensor de peso (HX711)
 Se realiza la medición del peso del neonato:
 
 - Se promedian múltiples lecturas
@@ -348,7 +348,7 @@ Calibración:
 ````
 scale.set_scale(calibration_factor);
 ````
-#### 11. Visualización en pantalla OLED
+#### 10. Visualización en pantalla OLED
 
 La pantalla OLED permite visualizar en tiempo real los parámetros del sistema.
 ````
@@ -370,7 +370,7 @@ void mostrarOLED() {
   display.display();
 }
 ````
-#### 12. Monitor serial
+#### 11. Monitor serial
 Se envían los datos al monitor serial para fines de depuración y validación.
 ````
 void mostrarSerial() {
@@ -384,7 +384,7 @@ void mostrarSerial() {
   Serial.println(weight_kg);
 }
 ````
-#### 13. Inicialización del sistema (setup)
+#### 12. Inicialización del sistema (setup)
 En esta etapa se inicializan todos los dispositivos del sistema.
 ````
 void setup() {
@@ -400,7 +400,7 @@ void setup() {
   scale.set_scale(calibration_factor);
 }
 ````
-#### 14. Ciclo principal de ejecución (loop)
+#### 13. Ciclo principal de ejecución (loop)
 El sistema opera de forma continua realizando:
 
 1. Lectura de sensores
@@ -423,7 +423,7 @@ void loop() {
   delay(800);
 }
 ````
-#### 15. Funcionamiento general del sistema
+#### 14. Funcionamiento general del sistema
 
 El sistema implementa un control térmico básico en lazo cerrado:
 
@@ -452,6 +452,109 @@ El sistema utiliza tres LEDs:
 - LED LOW → Indica temperatura baja  
 - LED OK → Indica temperatura normal  
 - LED HIGH → Indica temperatura alta  
+
+### Costos Totales 
+
+#### Desglose de costos del prototipo
+
+<div align="center">
+<table>
+  <tr>
+    <th>Categoría</th>
+    <th>Componente</th>
+    <th>Cantidad</th>
+    <th>Costo Unitario (COP)</th>
+    <th>Costo Total (COP)</th>
+  </tr>
+  <tr><td><b>Sensado</b></td><td>Sensor DHT22</td><td>1</td><td>17.000</td><td>17.000</td></tr>
+  <tr><td></td><td>Celda de carga + HX711</td><td>2</td><td>7.000</td><td>14.000</td></tr>
+
+  <tr><td><b>Actuación</b></td><td>Ventilador 12V</td><td>1</td><td>7.000</td><td>7.000</td></tr>
+  <tr><td></td><td>Bombillo + roseta</td><td>1</td><td>8.000</td><td>8.000</td></tr>
+  <tr><td></td><td>Relé</td><td>1</td><td>500</td><td>500</td></tr>
+
+  <tr><td><b>Control y potencia</b></td><td>Fuente 12V 3A</td><td>1</td><td>48.000</td><td>48.000</td></tr>
+  <tr><td></td><td>Capacitores y resistencias</td><td>13 </td><td>2.000</td><td>6.000</td></tr>
+  <tr><td></td><td>Trimmer</td><td>1</td><td>900</td><td>900</td></tr>
+
+  <tr><td><b>Interfaz</b></td><td>Pantalla OLED</td><td>1</td><td>5.000</td><td>5.000</td></tr>
+  <tr><td></td><td>LEDs</td><td>3</td><td>100</td><td>300</td></tr>
+  <tr><td></td><td>Cables y conectores</td><td> 5 m </td><td>10.000</td><td>4.000</td></tr>
+
+  <tr><td><b>Estructura</b></td><td>Materiales (cartón, silicona, etc.)</td><td>3 pliegos </td><td></td><td>60.000</td></tr>
+</table>
+</div>
+
+ 
+La tabla evidencia que el mayor costo del sistema se concentra en la fuente de alimentación dentro del subsistema de control y potencia, así como en la estructura física del prototipo. Por otro lado, los componentes de sensado y actuación presentan costos relativamente bajos, lo que demuestra que es posible implementar funciones clave de monitoreo y control con una inversión mínima. Esto refleja una adecuada distribución de recursos donde los elementos críticos reciben mayor inversión sin comprometer la funcionalidad general.
+
+---
+
+#### Costo total del sistema
+
+<div align="center">
+<table>
+  <tr>
+    <th>Concepto</th>
+    <th>Valor (COP)</th>
+  </tr>
+  <tr><td>Electrónica</td><td>110.700</td></tr>
+  <tr><td>Estructura</td><td>60.000</td></tr>
+  <tr><td><b>TOTAL</b></td><td><b>170.700</b></td></tr>
+</table>
+</div>
+
+
+El costo total del sistema asciende aproximadamente a $170.700 COP, donde la mayor proporción corresponde a los componentes electrónicos. Sin embargo, la estructura física también representa una fracción significativa del costo total, evidenciando que en el desarrollo de prototipos biomédicos no solo la electrónica influye en el presupuesto, sino también los materiales de construcción. Este balance permite obtener un sistema funcional manteniendo un costo global accesible.
+
+---
+
+#### Comparativa con soluciones comerciales
+
+<div align="center">
+<table>
+  <tr>
+    <th>Empresa / Marca</th>
+    <th>Tipo de incubadora</th>
+    <th>Costo aproximado (COP)</th>
+  </tr>
+  <tr><td>Dräger</td><td>Incubadora neonatal avanzada</td><td>60.000.000 – 80.000.000</td></tr>
+  <tr><td>Instrumentalia S.A.S.</td><td>Incubadora clínica estándar</td><td>40.000.000 – 70.000.000</td></tr>
+  <tr><td>LEEX Medical</td><td>Incubadora neonatal básica</td><td>30.000.000 – 50.000.000</td></tr>
+</table>
+</div>
+ 
+La comparación muestra una diferencia significativa entre el costo del prototipo desarrollado y las incubadoras comerciales, cuyos valores oscilan entre 30 y 80 millones de pesos colombianos. Esta diferencia se debe principalmente a que los equipos comerciales incorporan tecnologías avanzadas, certificaciones internacionales, sensores de grado médico y múltiples sistemas de seguridad, aspectos que elevan considerablemente su valor en el mercado.
+
+---
+
+#### Comparación directa
+
+<div align="center">
+<table>
+  <tr>
+    <th>Característica</th>
+    <th>Prototipo</th>
+    <th>Comercial</th>
+  </tr>
+  <tr><td>Costo</td><td>~170.700 COP</td><td>30M – 80M COP</td></tr>
+  <tr><td>Uso</td><td>Educativo</td><td>Clínico</td></tr>
+  <tr><td>Control</td><td>ON/OFF</td><td>PID avanzado</td></tr>
+  <tr><td>Sensores</td><td>Básicos</td><td>Grado médico</td></tr>
+  <tr><td>Seguridad</td><td>Baja</td><td>Alta</td></tr>
+  <tr><td>Certificación</td><td>No</td><td>IEC 60601</td></tr>
+</table>
+</div>
+ 
+La comparación directa permite evidenciar que, aunque el prototipo cumple con funciones básicas de monitoreo y control, presenta limitaciones importantes frente a sistemas comerciales, especialmente en términos de precisión, seguridad y certificación. No obstante, su bajo costo lo convierte en una herramienta adecuada para fines educativos y de experimentación, permitiendo comprender los principios fundamentales de funcionamiento de una incubadora neonatal.
+
+---
+
+#### Relación de costos
+
+El sistema desarrollado representa aproximadamente entre el 0.2% y 0.5% del costo de una incubadora comercial.
+ 
+Esta relación de costos pone en evidencia la gran brecha económica entre un prototipo académico y un dispositivo médico certificado. Aunque el sistema desarrollado no cumple con estándares clínicos, su bajo costo demuestra el potencial de la ingeniería para diseñar soluciones accesibles, especialmente en contextos educativos o de investigación, donde el objetivo principal es la comprensión y validación de conceptos más que la implementación clínica directa.
 
 ## PARTE C – Preguntas para la Discusión
 
