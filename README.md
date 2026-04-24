@@ -651,9 +651,42 @@ Algunos fabricantes han desarrollado dispositivos **híbridos** que combinan amb
 
 ---
 
+## 5. Conclusiones 
+
+El desarrollo de la incubadora neonatal a escala permitió integrar de manera efectiva principios de control automático, instrumentación biomédica y sistemas embebidos, evidenciando la capacidad de reproducir un entorno térmico controlado similar al requerido en aplicaciones clínicas. La implementación basada en el microcontrolador ESP32, junto con sensores y actuadores, demuestra la viabilidad de diseñar soluciones tecnológicas accesibles que respondan a necesidades reales en el cuidado neonatal, alineándose conceptualmente con los lineamientos establecidos en normas como la IEC 60601-2-19 para dispositivos médicos.
 
 
-## 5. Referencias
+**1. Subsistema de sensado**
+
+La incorporación de sensores como el DHT22 y la celda de carga con módulo HX711 permitió la adquisición de variables fisiológicas y ambientales relevantes, como temperatura, humedad y peso. La implementación de validaciones para evitar datos inválidos (NaN) y el filtrado de ruido en la señal de peso evidencian la importancia del procesamiento de señales en sistemas biomédicos, garantizando mediciones confiables para la toma de decisiones.
+
+---
+
+**2. Subsistema de control**
+
+El sistema implementa un control térmico básico basado en umbrales, en el cual el calefactor se activa o desactiva dependiendo de la temperatura medida. Este enfoque, aunque sencillo, resulta funcional para mantener condiciones dentro de un rango seguro, demostrando la aplicabilidad de estrategias de control discreto en sistemas biomédicos. Además, la operación continua del ventilador contribuye a la homogenización del ambiente interno de la incubadora.
+
+---
+
+**3. Subsistema de actuación**
+
+El uso de un relé para el control del bombillo como fuente de calor y un ventilador como sistema de ventilación evidencia la capacidad de los sistemas embebidos para interactuar con elementos físicos del entorno. La correcta coordinación entre estos actuadores permite modificar activamente las condiciones internas, cumpliendo el objetivo de regulación térmica.
+
+---
+
+**4. Subsistema de visualización e interfaz**
+
+La implementación de una pantalla OLED y un sistema de LEDs proporciona una interfaz de usuario clara e intuitiva. Mientras la pantalla ofrece información detallada en tiempo real, los LEDs permiten una interpretación rápida del estado térmico del sistema (bajo, normal o alto), lo cual es especialmente relevante en contextos clínicos donde la rapidez en la toma de decisiones es crítica.
+
+---
+
+**5. Integración del sistema**
+
+La integración de los diferentes subsistemas (sensado, control, actuación y visualización) demuestra un enfoque interdisciplinario característico de la ingeniería biomédica. El sistema opera en tiempo real, procesa información continuamente y responde de manera autónoma a cambios en las condiciones ambientales, evidenciando una arquitectura funcional y coherente. Este tipo de desarrollos fortalece la comprensión práctica de los sistemas de control aplicados al ámbito de la salud.
+
+---
+
+## 6. Referencias
 
 [1] C. G. K. Tran et al., "Designing a low-cost multifunctional infant incubator," *J. Lab. Autom.*, vol. 19, no. 3, pp. 332–337, Jun. 2014. https://doi.org/10.1177/2211068214530391
 
